@@ -39,8 +39,8 @@ namespace ZenLeap.Api
 
             app.UseStaticFiles();
 
-			DataContext context = new DataContext();
-			DbInitializer.Initialize(context);
+			//DataContext context = new DataContext();
+			//DbInitializer.Initialize(context);
 
 			app.UseMvc(routes =>
             {
