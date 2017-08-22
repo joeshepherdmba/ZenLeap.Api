@@ -10,7 +10,7 @@ using ZenLeap.Api.Models;
 namespace ZenLeap.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class TaskController : BaseController
+    public class TasksController : BaseController
     {
 		// GET: api/users        
 		[HttpGet]
