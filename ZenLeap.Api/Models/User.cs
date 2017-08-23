@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace ZenLeap.Api.Models
 {
-    public class User // TODO: wire up Identity
+    public class User : IdentityUser<int> // TODO: wire up Identity
     {
-        [Key]
-		public int Id { get; set; }
         [Required]
 		public string LastName { get; set; }
         [Required]
 		public string FirstName { get; set; } 
-        [Required]
-        public string Email { get; set; }
+        //[Required]
+        //public string Email { get; set; }
         [Required]
         public string Password { get; set; } //TODO: Password hash
 

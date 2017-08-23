@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ZenLeap.Api.Data;
 using ZenLeap.Api.Models;
+using ZenLeap.Api.Services;
 
 namespace ZenLeap.Api
 {
@@ -28,7 +30,7 @@ namespace ZenLeap.Api
         {
             services.AddMvc();
 
-			/*
+            /*
             // requires: using Microsoft.AspNetCore.Authorization;
 			//           using Microsoft.AspNetCore.Mvc.Authorization;
 			services.AddMvc(config =>
@@ -41,9 +43,10 @@ namespace ZenLeap.Api
             */
 
             // Identoty 2.0
-			services.AddIdentity<User, IdentityRole>()
-        		.AddEntityFrameworkStores<DataContext>()
-        		.AddDefaultTokenProviders();
+            services.AddIdentity<User, ApplicationRole>()
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
+
 
 
 			// If you want to tweak Identity cookies, they're no longer part of IdentityOptions.
@@ -87,6 +90,17 @@ namespace ZenLeap.Api
 				// User settings
 				options.User.RequireUniqueEmail = true;
 			});
+
+			services.AddMvc()
+				.AddRazorPagesOptions(options =>
+				{
+					options.Conventions.AuthorizeFolder("/Account/Manage");
+					options.Conventions.AuthorizePage("/Account/Logout");
+				});
+
+			// Register no-op EmailSender used by account confirmation and password reset during development
+			// For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+			services.AddSingleton<IEmailSender, EmailSender>();
 
 			// Add application services.
 			//services.AddTransient<IEmailSender, AuthMessageSender>();
