@@ -8,9 +8,13 @@ namespace ZenLeap.Api.Data
     public class DataContext : IdentityDbContext<User, ApplicationRole, int>//DbContext
     {
         public DataContext()
-        {
-            
+            :base(){
+
         }
+		public DataContext(DbContextOptions<DataContext> options)
+            : base(options)
+        {
+		}
 
         public DbSet<User> Users{ get; set; }
 		public DbSet<Company> Companies { get; set; }
@@ -23,10 +27,6 @@ namespace ZenLeap.Api.Data
 			optionsBuilder.UseSqlite("Filename=./ZenLeap_Launch.sqlite");
 		}
 
-		public DataContext(DbContextOptions<DataContext> options)
-            : base(options)
-        {
-		}
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

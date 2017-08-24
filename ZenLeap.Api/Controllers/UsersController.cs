@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZenLeap.Api.Filters;
 using ZenLeap.Api.Models;
@@ -11,6 +12,7 @@ using ZenLeap.Api.Models;
 
 namespace ZenLeap.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : BaseController
     {

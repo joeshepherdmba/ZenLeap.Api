@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZenLeap.Api.Data;
@@ -11,7 +12,8 @@ using ZenLeap.Api.Filters;
 
 namespace ZenLeap.Api.Controllers
 {
-    [ValidateModel]
+	[Authorize]
+	[ValidateModel]
     public class BaseController : Controller
     {
         protected UnitOfWork _unitOfWork;

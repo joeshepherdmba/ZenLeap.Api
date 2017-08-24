@@ -12,7 +12,7 @@ using ZenLeap.Api.Models;
 namespace ZenLeap.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20170823235250_init")]
+    [Migration("20170824024455_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,11 +221,9 @@ namespace ZenLeap.Api.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -237,8 +235,7 @@ namespace ZenLeap.Api.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("Password")
-                        .IsRequired();
+                    b.Property<string>("Password");
 
                     b.Property<string>("PasswordHash");
 

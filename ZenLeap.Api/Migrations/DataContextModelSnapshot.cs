@@ -220,11 +220,9 @@ namespace ZenLeap.Api.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -236,8 +234,7 @@ namespace ZenLeap.Api.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("Password")
-                        .IsRequired();
+                    b.Property<string>("Password");
 
                     b.Property<string>("PasswordHash");
 
