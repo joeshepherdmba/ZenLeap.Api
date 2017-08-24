@@ -11,6 +11,7 @@ namespace ZenLeap.Api.Models
         public int Id { get; set; }
         [Required]
         public string CompanyName { get; set; }
+        [DataType(DataType.Date)]
         public DateTime DateEstablished { get; set; }
 
         public int OwnerId { get; set; }
@@ -18,6 +19,7 @@ namespace ZenLeap.Api.Models
         [ForeignKey("OwnerId")]
         public virtual User Owner { get; set; }
 
+        public virtual ICollection<User> Employees { get; set; }
         public virtual ICollection<Project> Projects { get; set; } 
     }    
 }

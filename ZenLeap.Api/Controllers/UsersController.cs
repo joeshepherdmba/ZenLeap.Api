@@ -2,19 +2,30 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ZenLeap.Api.Data;
 using ZenLeap.Api.Filters;
 using ZenLeap.Api.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 // https://stormpath.com/blog/5-api-tips-dotnet-core Use this for Core
 // Filters: https://msdn.microsoft.com/en-us/magazine/mt767699.aspx
+// Authorization examples: https://github.com/aspnet/Docs/blob/master/aspnetcore/security/authorization/secure-data/samples/final/Controllers/ContactsController.cs
 
 namespace ZenLeap.Api.Controllers
 {
     [Route("api/[controller]")]
     public class UsersController : BaseController
     {
+		public UsersController(DataContext context,
+			IAuthorizationService authorizationService,
+			UserManager<User> userManager)
+			: base(context, authorizationService, userManager)
+        {
+
+		}
+
 		// GET: api/users
 		// this maps to a get requests to:
 		// domain/api/users

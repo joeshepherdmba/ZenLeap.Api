@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ZenLeap.Api.Data;
 using ZenLeap.Api.Models;
+using ZenLeap.Api.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,11 +16,42 @@ namespace ZenLeap.Api.Controllers
     [Route("api/[controller]")]
     public class CompaniesController : BaseController
     {
+		public CompaniesController(DataContext context,
+			IAuthorizationService authorizationService,
+			UserManager<User> userManager)
+            :base(context, authorizationService, userManager)
+        {
+            
+        }
+
 		// GET: api/companies        
 		[HttpGet]
 		public async Task<IEnumerable<Company>> Get()
 		{
-			return await _unitOfWork.CompanyRepository.GetAllAsync();
+			var companies = await _unitOfWork.CompanyRepository.GetAllAsync();
+
+
+
+
+            // EXAMPLE CODE
+			var isAuthorized = User.IsInRole(Constants.CompanyManagersRole) ||
+							   User.IsInRole(Constants.CompanyAdministratorsRole);
+
+            var currentUserId = int.Parse(_userManager.GetUserId(User));
+
+			// Only approved contacts are shown UNLESS you're authorized to see them
+			// or you are the owner.
+			if (!isAuthorized)
+			{
+				companies = companies.Where(c => c.OwnerId == currentUserId);
+			}
+
+			return companies;
+
+			//if (await _authorizationService.AuthorizeAsync(User, document, "EditPolicy"))
+			//{
+			//	return View(document);
+			//}
 		}
 
 		// GET api/values/5

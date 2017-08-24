@@ -14,5 +14,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Authorization\" />
+    <Folder Include="Authorization\Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Authorization\CompanyAdministraitorsAuthorizationHandler.cs" />
   </ItemGroup>
 </Project>
