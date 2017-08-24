@@ -120,8 +120,9 @@ namespace ZenLeap.Api
 
             app.UseStaticFiles();
 
-            // DataContext context = new DataContext();
+            DataContext context = new DataContext();
             // DbInitializer.Initialize(context);
+            DbInitializer.Initialize(app.ApplicationServices, context).Wait();
 
             app.UseAuthentication();
 

@@ -30,13 +30,12 @@ namespace ZenLeap.Api.Controllers
 		{
 			var companies = await _unitOfWork.CompanyRepository.GetAllAsync();
 
-
-
-
-            // EXAMPLE CODE
 			var isAuthorized = User.IsInRole(Constants.CompanyManagersRole) ||
 							   User.IsInRole(Constants.CompanyAdministratorsRole);
 
+            if(User == null){
+                return null; // TODO: Need a better way to handle this. Maybe an exepection or redirect to login page?
+            }
             var currentUserId = int.Parse(_userManager.GetUserId(User));
 
 			// Only approved contacts are shown UNLESS you're authorized to see them
@@ -46,23 +45,38 @@ namespace ZenLeap.Api.Controllers
 				companies = companies.Where(c => c.OwnerId == currentUserId);
 			}
 
-			return companies;
-
-			//if (await _authorizationService.AuthorizeAsync(User, document, "EditPolicy"))
-			//{
-			//	return View(document);
-			//}
+            return companies;
 		}
 
 		// GET api/values/5
 		[HttpGet("{id}")]
-		public async Task<IActionResult> Get(int id)
+		public async Task<IActionResult> Get(int? id)
 		{
+            // Ensure id was entered
+            if(id == null){
+                return NotFound();
+            }
+
 			var company = await _unitOfWork.CompanyRepository.GetByIdAsync(id);
-			if (company == null)
+			
+            // Ensure value was returned
+            if (company == null)
 			{
 				return NotFound();
 			}
+
+            // Is authorized to Read
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, company, CompanyOperations.Read);
+
+            if(!isAuthorized.Succeeded){
+                return new ChallengeResult();
+            }
+
+			// EXAMPLE CODE: https://github.com/aspnet/Docs/blob/master/aspnetcore/security/authorization/secure-data/samples/final/Controllers/ContactsController.cs
+			//if (contact.Status != ContactStatus.Approved &&   // Not approved.
+			//!isAuthorizedRead &&        // Don't own it.
+			//!isAuthorizedApprove)       // Not a manager.
+
 			return Ok(company);
 		}
 
@@ -75,33 +89,48 @@ namespace ZenLeap.Api.Controllers
 				return BadRequest();
 			}
 
-			await _unitOfWork.CompanyRepository.AddAsync(value);
+			// Is authorized to Create
+			var isAuthorized = await _authorizationService.AuthorizeAsync(User, value, CompanyOperations.Create);
+
+			if (!isAuthorized.Succeeded)
+			{
+				return new ChallengeResult();
+			}
+
+            await _unitOfWork.CompanyRepository.AddAsync(value); // TODO: Figure out how to return the Id of the new company
 			_unitOfWork.CompanyRepository.SaveChanges();
 
 			return Ok();
 			//return CreatedAtRoute("GetBook", new { id = createdBook.Id }, createdBook);
 		}
 
-		// PUT api/values/5
-		[HttpPut("{id}")]
-		//[ValidateUserExists]
-		public async Task<IActionResult> Put(int id, [FromBody]Company value)
-		{
-			if (value == null)
-			{
-				return BadRequest();
-			}
-			var company = await _unitOfWork.CompanyRepository.GetByIdAsync(id);
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        //[ValidateUserExists]
+        public async Task<IActionResult> Put(int id, [FromBody]Company value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            var company = await _unitOfWork.CompanyRepository.GetByIdAsync(id);
 
-            company.CompanyName = value.CompanyName;
-            company.DateEstablished = value.DateEstablished;
-            company.Owner = value.Owner;
-            company.OwnerId = value.OwnerId;
-            company.Projects = value.Projects;
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, company, CompanyOperations.Update);
 
-			_unitOfWork.CompanyRepository.Update(company);
-			_unitOfWork.CompanyRepository.SaveChanges();
-			return Ok(company);
+            if (isAuthorized.Succeeded)
+            {
+                company.CompanyName = value.CompanyName;
+                company.DateEstablished = value.DateEstablished;
+                company.Owner = value.Owner;
+                company.OwnerId = value.OwnerId;
+                company.Projects = value.Projects;
+
+                _unitOfWork.CompanyRepository.Update(company);
+                _unitOfWork.CompanyRepository.SaveChanges();
+                return Ok(company);
+            }
+
+            return Unauthorized();
 		}
 
 		// DELETE api/values/5
@@ -109,8 +138,18 @@ namespace ZenLeap.Api.Controllers
 		//[ValidateUserExists]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var userToDelete = _unitOfWork.CompanyRepository.GetById(id);
-			_unitOfWork.CompanyRepository.Delete(userToDelete);
+			var companyToDelete = _unitOfWork.CompanyRepository.GetById(id);
+
+			var company = await _unitOfWork.CompanyRepository.GetByIdAsync(id);
+
+			var isAuthorized = await _authorizationService.AuthorizeAsync(User, company, CompanyOperations.Update);
+
+			if(!isAuthorized.Succeeded)
+			{
+				return new ChallengeResult();
+			}
+
+			_unitOfWork.CompanyRepository.Delete(companyToDelete);
 			await _unitOfWork.CompanyRepository.SaveChangesAsync();
 			return Ok();
 		}
