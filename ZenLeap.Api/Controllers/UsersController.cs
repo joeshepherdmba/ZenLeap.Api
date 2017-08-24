@@ -12,7 +12,6 @@ using ZenLeap.Api.Models;
 
 namespace ZenLeap.Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : BaseController
     {
