@@ -52,26 +52,26 @@ namespace ZenLeap.Api
 			// If you want to tweak Identity cookies, they're no longer part of IdentityOptions.
 			services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/LogIn");
 			
-            // Facebook Authentication
-            services.AddAuthentication()
-					.AddFacebook(options => {
-						options.AppId = Configuration["auth:facebook:appid"];
-						options.AppSecret = Configuration["auth:facebook:appsecret"];
-					});
+   //         // Facebook Authentication
+   //         services.AddAuthentication()
+			//		.AddFacebook(options => {
+			//			options.AppId = Configuration["auth:facebook:appid"];
+			//			options.AppSecret = Configuration["auth:facebook:appsecret"];
+			//		});
 
-			// Google Authentication
-			services.AddAuthentication()
-            		.AddGoogle(options => {
-            			options.ClientId = Configuration["auth:google:clientid"];
-            			options.ClientSecret = Configuration["auth:google:clientsecret"];
-            		});
+			//// Google Authentication
+			//services.AddAuthentication()
+   //         		.AddGoogle(options => {
+   //         			options.ClientId = Configuration["auth:google:clientid"];
+   //         			options.ClientSecret = Configuration["auth:google:clientsecret"];
+   //         		});
 
-			// Microsoft Authentication
-			services.AddAuthentication()
-            		.AddMicrosoftAccount(options => {
-            			options.ClientId = Configuration["auth:microsoft:clientid"];
-            			options.ClientSecret = Configuration["auth:microsoft:clientsecret"];
-            		});
+			//// Microsoft Authentication
+			//services.AddAuthentication()
+            		//.AddMicrosoftAccount(options => {
+            		//	options.ClientId = Configuration["auth:microsoft:clientid"];
+            		//	options.ClientSecret = Configuration["auth:microsoft:clientsecret"];
+            		//});
 
 			// Configure Identity
 			services.Configure<IdentityOptions>(options =>
