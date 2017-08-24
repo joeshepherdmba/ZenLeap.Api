@@ -12,7 +12,7 @@ using ZenLeap.Api.Models;
 namespace ZenLeap.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20170824024455_init")]
+    [Migration("20170824192629_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,6 +213,8 @@ namespace ZenLeap.Api.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<int?>("CompanyId");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -251,6 +253,8 @@ namespace ZenLeap.Api.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -339,6 +343,13 @@ namespace ZenLeap.Api.Migrations
                         .WithMany("ProjectTasks")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ZenLeap.Api.Models.User", b =>
+                {
+                    b.HasOne("ZenLeap.Api.Models.Company")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId");
                 });
 #pragma warning restore 612, 618
         }
