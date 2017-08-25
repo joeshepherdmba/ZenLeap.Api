@@ -31,28 +31,20 @@ namespace ZenLeap.Api.Data
 
         #region snippet_CreateRoles        
 
-        private static async Task<int> EnsureUser(IServiceProvider serviceProvider, User newUser, string testUserPw)
+        private static async Task<string> EnsureUser(IServiceProvider serviceProvider, User newUser, string testUserPw)
         {
             var userManager = serviceProvider.GetService<UserManager<User>>();
 
             var user = await userManager.FindByNameAsync(newUser.UserName);
             if (user == null)
             {
-                user = new User
-                {
-                    FirstName = "Joe",
-                    LastName = "Shepherd",
-                    Email = "joe@eurussolutions",
-                    AssignedTasks = null,
-                    Projects = null
-                };
                 await userManager.CreateAsync(user, testUserPw);
             }
 
             return user.Id;
         }
 
-        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, string uid, string role)
+        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, User newUser, string role)
         {
             IdentityResult IR = null;
             var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
@@ -64,9 +56,9 @@ namespace ZenLeap.Api.Data
 
             var userManager = serviceProvider.GetService<UserManager<User>>();
 
-            var user = await userManager.FindByIdAsync(uid);
+            var user = await userManager.FindByIdAsync(newUser.Id);
 
-            IR = await userManager.AddToRoleAsync(user, Constants.CompanyAdministratorsRole); // TODO: Create and change to GlobalAdminRole
+            IR = await userManager.AddToRoleAsync(user, role); 
 
             return IR;
         }
@@ -75,11 +67,42 @@ namespace ZenLeap.Api.Data
         #region "seedDB"
         public static async void SeedDB(DataContext context, IServiceProvider serviceProvider)
         {
+            // Create Global Admin
+			var globalAdmin = new User
+			{
+				FirstName = "Joe",
+				LastName = "Shepherd",
+				Email = "joe@eurussolutions",
+				AssignedTasks = null,
+				Projects = null
+			};
+
+            var id = await EnsureUser(serviceProvider, globalAdmin, "Pass@word1");
+            await EnsureRole(serviceProvider, globalAdmin, Constants.GlobalAdministratorsRole);
+
             var users = new User[]
             {
-                new User{FirstName="Carson",LastName="Alexander", Email="test@test.com", AssignedTasks=null, Projects=null, Password="Pass@word1"},
-                new User { FirstName = "Edward", LastName = "Norton", Email = "test@test.com", AssignedTasks = null, Projects = null, Password = "Pass@word1"},
-                new User{FirstName="Ginger",LastName="Martin", Email="test@test.com", AssignedTasks=null, Projects=null, Password="Pass@word1"}
+                new User{
+                    FirstName="Carson",
+                    LastName="Alexander", 
+                    Email="test@test.com", 
+                    AssignedTasks=null, 
+                    Projects=null
+                },
+                new User { 
+                    FirstName = "Edward", 
+                    LastName = "Norton", 
+                    Email = "test@test.com", 
+                    AssignedTasks = null, 
+                    Projects = null
+                },
+                new User{
+                    FirstName="Ginger",
+                    LastName="Martin", 
+                    Email="test@test.com", 
+                    AssignedTasks=null, 
+                    Projects=null
+                }
             };
 
             foreach (User u in users)

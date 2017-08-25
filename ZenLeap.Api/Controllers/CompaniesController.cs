@@ -116,8 +116,9 @@ namespace ZenLeap.Api.Controllers
             var company = await _unitOfWork.CompanyRepository.GetByIdAsync(id);
 
             var isAuthorized = await _authorizationService.AuthorizeAsync(User, company, CompanyOperations.Update);
+            var isGlobalAdmin = User.IsInRole(Constants.GlobalAdministratorsRole);
 
-            if (isAuthorized.Succeeded)
+            if (isAuthorized.Succeeded || isGlobalAdmin)
             {
                 company.CompanyName = value.CompanyName;
                 company.DateEstablished = value.DateEstablished;

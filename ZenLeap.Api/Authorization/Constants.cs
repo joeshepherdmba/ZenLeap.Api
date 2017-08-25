@@ -15,5 +15,8 @@ namespace ZenLeap.Api.Authorization
 
 		public static readonly string ProjectAdministratorsRole = "ProjectAdministrators";
 		public static readonly string ProjectManagersRole = "ProjectManagers";
+
+		public static readonly string GlobalAdministratorsRole = "GlobalAdministrators";
+
 	}
 }

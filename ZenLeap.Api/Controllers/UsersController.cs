@@ -43,7 +43,7 @@ namespace ZenLeap.Api.Controllers
         // GET api/values/5
         [HttpGet("{id}")]
         //[ValidateUserExists]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
             if(user == null)
@@ -72,7 +72,7 @@ namespace ZenLeap.Api.Controllers
         // PUT api/values/5
         [HttpPut("{id}")]
 		//[ValidateUserExists]
-        public async Task<IActionResult> Put(int id, [FromBody]User value)
+        public async Task<IActionResult> Put(string id, [FromBody]User value)
         {
             if(value == null){
                 return BadRequest();
@@ -83,7 +83,6 @@ namespace ZenLeap.Api.Controllers
             user.Email = value.Email;
             user.Projects = value.Projects;
             user.AssignedTasks = value.AssignedTasks;
-            user.Password = value.Password;
 
             _unitOfWork.UserRepository.Update(user);
             _unitOfWork.UserRepository.SaveChanges();
@@ -93,7 +92,7 @@ namespace ZenLeap.Api.Controllers
         // DELETE api/values/5
         [HttpDelete("{id}")]
 		//[ValidateUserExists]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             var userToDelete = _unitOfWork.UserRepository.GetById(id);
             _unitOfWork.UserRepository.Delete(userToDelete);
