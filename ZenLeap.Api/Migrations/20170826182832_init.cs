@@ -14,6 +14,7 @@ namespace ZenLeap.Api.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true)
                 },
@@ -141,8 +142,7 @@ namespace ZenLeap.Api.Migrations
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: true),
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", nullable: true),
-                    Password = table.Column<string>(type: "TEXT", nullable: true)
+                    LastName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

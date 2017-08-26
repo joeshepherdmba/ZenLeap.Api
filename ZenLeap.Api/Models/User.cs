@@ -13,7 +13,7 @@ namespace ZenLeap.Api.Models
         //[Required]
         //public string Email { get; set; }
 
-        public string Password { get; set; } //TODO: Password hash
+        //public string Password { get; set; } //TODO: Password hash
 
         public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<ProjectTask> AssignedTasks { get; set; }
