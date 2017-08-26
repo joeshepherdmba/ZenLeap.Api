@@ -18,7 +18,7 @@ namespace ZenLeap.Api.Models
         public double VelocityFactor { get; set; }
         public double HealthFactor { get; set; }
 
-		public int ProjectOwnerId { get; set; }
+		public string ProjectOwnerId { get; set; }
 
         [ForeignKey("ProjectOwnerId")]
         public virtual User ProjectOwner { get; set; }

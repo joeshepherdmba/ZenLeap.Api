@@ -40,7 +40,7 @@ namespace ZenLeap.Api.Authorization.Handlers
 				return Task.FromResult(0);
 			}
 
-			if (resource.ProjectOwnerId == int.Parse(_userManager.GetUserId(context.User)))
+			if (resource.ProjectOwnerId == _userManager.GetUserId(context.User))
 			{
 				context.Succeed(requirement);
 			}

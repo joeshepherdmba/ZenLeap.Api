@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ZenLeap.Api.Models
 {
-    public class User : IdentityUser<int> // TODO: wire up Identity
+    public class User : IdentityUser//<int> // TODO: wire up Identity
     {
 
 		public string LastName { get; set; }

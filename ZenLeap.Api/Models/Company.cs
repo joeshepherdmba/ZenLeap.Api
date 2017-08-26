@@ -14,7 +14,7 @@ namespace ZenLeap.Api.Models
         [DataType(DataType.Date)]
         public DateTime DateEstablished { get; set; }
 
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; }
 
         [ForeignKey("OwnerId")]
         public virtual User Owner { get; set; }

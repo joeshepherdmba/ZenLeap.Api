@@ -5,7 +5,7 @@ using ZenLeap.Api.Models;
 
 namespace ZenLeap.Api.Data
 {
-    public class DataContext : IdentityDbContext<User, ApplicationRole, int>//DbContext
+    public class DataContext : IdentityDbContext//<User, ApplicationRole, int>//DbContext
     {
         public DataContext()
             :base(){
@@ -20,6 +20,7 @@ namespace ZenLeap.Api.Data
 		public DbSet<Company> Companies { get; set; }
 		public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<ApplicationRole> Roles { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

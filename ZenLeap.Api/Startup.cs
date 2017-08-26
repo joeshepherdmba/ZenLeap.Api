@@ -28,6 +28,7 @@ namespace ZenLeap.Api
 
             services.AddDbContext<DataContext>(options =>
 				options.UseSqlite("Filename=./ZenLeap_Launch.sqlite"));
+            
            
             /*
             // requires: using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,7 @@ namespace ZenLeap.Api
 			});
             */
 
-            // Identoty 2.0
+            // Identity 2.0
             services.AddIdentity<User, ApplicationRole>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
@@ -51,8 +52,8 @@ namespace ZenLeap.Api
 			// If you want to tweak Identity cookies, they're no longer part of IdentityOptions.
 			services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/LogIn");
 			
-   //         // Facebook Authentication
-   //         services.AddAuthentication()
+            // Facebook Authentication
+            //services.AddAuthentication()
 			//		.AddFacebook(options => {
 			//			options.AppId = Configuration["auth:facebook:appid"];
 			//			options.AppSecret = Configuration["auth:facebook:appsecret"];
@@ -118,13 +119,16 @@ namespace ZenLeap.Api
                 app.UseExceptionHandler("/Error");
             }
 
+			app.UseAuthentication();
             app.UseStaticFiles();
+            //app.UseIdentity();
 
-            DataContext context = new DataContext();
-            // DbInitializer.Initialize(context);
-            DbInitializer.Initialize(app.ApplicationServices, context).Wait();
+   //         DataContext context = new DataContext();
+			//// DbInitializer.Initialize(context);
+			//var userManager = app.ApplicationServices.GetService<UserManager<User>>();
+			//var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>();
 
-            app.UseAuthentication();
+            //DbInitializer.Initialize(userManager, roleManager, context).Wait();
 
 			app.UseMvc(routes =>
             {

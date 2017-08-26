@@ -36,7 +36,7 @@ namespace ZenLeap.Api.Controllers
             if(User == null){
                 return null; // TODO: Need a better way to handle this. Maybe an exepection or redirect to login page?
             }
-            var currentUserId = int.Parse(_userManager.GetUserId(User));
+            var currentUserId = _userManager.GetUserId(User);
 
 			// Only approved contacts are shown UNLESS you're authorized to see them
 			// or you are the owner.
