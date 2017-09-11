@@ -13,9 +13,7 @@ namespace ZenLeap.Api.Pages
 
         public void OnGet()
         {
-            Message = "Your application description page.";
-            User user = _unitOfWork.UserRepository.GetById(1);
-            Message = user.FirstName;
+            
         }
     }
 }

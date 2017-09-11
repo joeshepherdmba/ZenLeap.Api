@@ -1,0 +1,64 @@
+﻿body {
+    font-family: 'Open Sans', sans-serif;
+}
+header, footer {
+    background-color: #333;
+    color: #ddd;
+    padding: 20px;
+}
+
+
+
+.section-header {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding-top: 10px;
+}
+
+
+.section-group {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.section-group-alt {
+    background-color: #555;
+    color: #ddd;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.section-group p{
+    font-size: 16px;
+}
+
+.section-group-alt p {
+    font-size: 16px;
+}
+
+.section-group img {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.section-group-alt img {
+    background-color: #555;
+    color: #ddd;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.section-button a{
+    padding-top: 5px;
+}

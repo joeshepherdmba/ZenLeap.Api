@@ -20,4 +20,9 @@
   <ItemGroup>
     <Compile Remove="Authorization\CompanyAdministraitorsAuthorizationHandler.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Pages\Test.cshtml.cs">
+      <DependentUpon>Test.cshtml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
