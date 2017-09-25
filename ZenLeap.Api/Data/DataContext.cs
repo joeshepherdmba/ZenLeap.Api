@@ -39,8 +39,8 @@ namespace ZenLeap.Api.Data
 			// For example, you can rename the ASP.NET Identity table names and more.
 			// Add your customizations after calling base.OnModelCreating(builder);
 
-			builder.Entity<OwnerTeams>().HasKey(x => new { x.TeamId, x.OwnerId });
-            builder.Entity<UserTeams>().HasKey(x => new { x.TeamId, x.UserId });
+			builder.Entity<TeamOwners>().HasKey(x => new { x.TeamId, x.OwnerId }).HasName("TeamOwnersId");
+            builder.Entity<TeamMembers>().HasKey(x => new { x.TeamId, x.MemberId }).HasName("TeamMembersId");
 		}
     }
 }

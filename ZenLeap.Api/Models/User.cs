@@ -11,9 +11,9 @@ namespace ZenLeap.Api.Models
 
 		public string FirstName { get; set; }
 
-        public virtual ICollection<UserTeams> Teams { get; set; } // TODO: Need many to many relationship
+        public virtual ICollection<TeamMembers> Teams { get; set; } // TODO: Need many to many relationship
 
-        public virtual ICollection<OwnerTeams> OwnedTeams { get; set; }
+        public virtual ICollection<TeamOwners> OwnedTeams { get; set; }
 
         //public virtual ICollection<Project> Projects { get; set; }
         //public virtual ICollection<ProjectTask> AssignedTasks { get; set; }

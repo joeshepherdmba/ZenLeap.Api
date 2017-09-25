@@ -18,10 +18,10 @@ namespace ZenLeap.Api.Models
 
 		public string OwnerId { get; set; }
 
-		//[ForeignKey("OwnerId")]
-		//public virtual User Owner { get; set; }
+		[ForeignKey("OwnerId")]
+		public virtual User Owner { get; set; }
 
-		public virtual ICollection<User> Members { get; set; }
+		public virtual ICollection<TeamMembers> Members { get; set; }
 
 	}
 }
