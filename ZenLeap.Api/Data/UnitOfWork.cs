@@ -13,6 +13,8 @@ namespace ZenLeap.Api.Data
         protected GenericRepository<Project> _projectRepository;
         protected GenericRepository<ProjectTask> _projectTaskRepository;
         protected GenericRepository<Company> _companyRepository;
+		protected GenericRepository<Team> _teamRepository;
+		protected GenericRepository<Event> _eventRepository;
 
         public UnitOfWork(DataContext context)
         {
@@ -71,10 +73,35 @@ namespace ZenLeap.Api.Data
 			}
 		}
 
+		/// <summary>
+		/// Get/Set Property for Company repository.
+		/// </summary>
+		public GenericRepository<Team> TeamRepository
+		{
+			get
+			{
+				if (this._teamRepository == null)
+					this._teamRepository = new GenericRepository<Team>(_context);
+				return _teamRepository;
+			}
+		}
 
-#region Implementing IDiosposable...
+		/// <summary>
+		/// Get/Set Property for Company repository.
+		/// </summary>
+		public GenericRepository<Event> EventRepository
+		{
+			get
+			{
+				if (this._eventRepository == null)
+					this._eventRepository = new GenericRepository<Event>(_context);
+				return _eventRepository;
+			}
+		}
 
-#region private dispose variable declaration...
+		#region Implementing IDiosposable...
+
+		#region private dispose variable declaration...
 		private bool disposed = false;
 #endregion
 

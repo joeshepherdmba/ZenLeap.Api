@@ -9,14 +9,14 @@ namespace ZenLeap.Api.Models
 
 		public string LastName { get; set; }
 
-		public string FirstName { get; set; } 
-        //[Required]
-        //public string Email { get; set; }
+		public string FirstName { get; set; }
 
-        //public string Password { get; set; } //TODO: Password hash
+        public virtual ICollection<UserTeams> Teams { get; set; } // TODO: Need many to many relationship
 
-        public virtual ICollection<Project> Projects { get; set; }
-        public virtual ICollection<ProjectTask> AssignedTasks { get; set; }
+        public virtual ICollection<OwnerTeams> OwnedTeams { get; set; }
+
+        //public virtual ICollection<Project> Projects { get; set; }
+        //public virtual ICollection<ProjectTask> AssignedTasks { get; set; }
 
 		///// <summary>
 		///// Navigation property for the roles this user belongs to.

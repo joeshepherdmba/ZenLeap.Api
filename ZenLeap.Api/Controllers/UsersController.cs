@@ -81,8 +81,8 @@ namespace ZenLeap.Api.Controllers
             user.FirstName = value.FirstName;
             user.LastName = value.LastName;
             user.Email = value.Email;
-            user.Projects = value.Projects;
-            user.AssignedTasks = value.AssignedTasks;
+            //user.Projects = value.Projects;
+            //user.AssignedTasks = value.AssignedTasks;
 
             _unitOfWork.UserRepository.Update(user);
             _unitOfWork.UserRepository.SaveChanges();

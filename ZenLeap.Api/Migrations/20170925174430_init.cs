@@ -14,13 +14,27 @@ namespace ZenLeap.Api.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DateEstablished = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    OwnerId = table.Column<string>(type: "TEXT", nullable: true),
+                    TeamName = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +120,7 @@ namespace ZenLeap.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Companies",
+                name: "Company",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -117,7 +131,7 @@ namespace ZenLeap.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
+                    table.PrimaryKey("PK_Company", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,15 +156,76 @@ namespace ZenLeap.Api.Migrations
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: true),
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", nullable: true)
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Companies_CompanyId",
+                        name: "FK_AspNetUsers_Company_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Companies",
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    EventOwnerId = table.Column<string>(type: "TEXT", nullable: true),
+                    ProjectOwnerId = table.Column<string>(type: "TEXT", nullable: true),
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Events_AspNetUsers_EventOwnerId",
+                        column: x => x.EventOwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Events_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OwnerTeams",
+                columns: table => new
+                {
+                    TeamId = table.Column<string>(type: "TEXT", nullable: false),
+                    OwnerId = table.Column<string>(type: "TEXT", nullable: false),
+                    TeamId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OwnerTeams", x => new { x.TeamId, x.OwnerId });
+                    table.ForeignKey(
+                        name: "FK_OwnerTeams_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OwnerTeams_Teams_TeamId1",
+                        column: x => x.TeamId1,
+                        principalTable: "Teams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -173,9 +248,9 @@ namespace ZenLeap.Api.Migrations
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Projects_Companies_CompanyId",
+                        name: "FK_Projects_Company_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Companies",
+                        principalTable: "Company",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -184,6 +259,31 @@ namespace ZenLeap.Api.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTeams",
+                columns: table => new
+                {
+                    TeamId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    TeamId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTeams", x => new { x.TeamId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserTeams_Teams_TeamId1",
+                        column: x => x.TeamId1,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserTeams_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,9 +362,34 @@ namespace ZenLeap.Api.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_OwnerId",
-                table: "Companies",
+                name: "IX_AspNetUsers_TeamId",
+                table: "AspNetUsers",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Company_OwnerId",
+                table: "Company",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_EventOwnerId",
+                table: "Events",
+                column: "EventOwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_TeamId",
+                table: "Events",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OwnerTeams_OwnerId",
+                table: "OwnerTeams",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OwnerTeams_TeamId1",
+                table: "OwnerTeams",
+                column: "TeamId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_CompanyId",
@@ -285,6 +410,16 @@ namespace ZenLeap.Api.Migrations
                 name: "IX_ProjectTasks_ProjectId",
                 table: "ProjectTasks",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTeams_TeamId1",
+                table: "UserTeams",
+                column: "TeamId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTeams_UserId",
+                table: "UserTeams",
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
@@ -319,8 +454,8 @@ namespace ZenLeap.Api.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Companies_AspNetUsers_OwnerId",
-                table: "Companies",
+                name: "FK_Company_AspNetUsers_OwnerId",
+                table: "Company",
                 column: "OwnerId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
@@ -330,8 +465,8 @@ namespace ZenLeap.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Companies_AspNetUsers_OwnerId",
-                table: "Companies");
+                name: "FK_Company_AspNetUsers_OwnerId",
+                table: "Company");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -349,7 +484,16 @@ namespace ZenLeap.Api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "OwnerTeams");
+
+            migrationBuilder.DropTable(
                 name: "ProjectTasks");
+
+            migrationBuilder.DropTable(
+                name: "UserTeams");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -361,7 +505,10 @@ namespace ZenLeap.Api.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Companies");
+                name: "Company");
+
+            migrationBuilder.DropTable(
+                name: "Teams");
         }
     }
 }

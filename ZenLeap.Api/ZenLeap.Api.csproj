@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Authorization\CompanyAdministraitorsAuthorizationHandler.cs" />
+    <Compile Remove="Models\ApplicationRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Pages\Test.cshtml.cs">

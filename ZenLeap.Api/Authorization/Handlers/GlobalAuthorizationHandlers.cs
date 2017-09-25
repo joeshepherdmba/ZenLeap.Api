@@ -6,12 +6,12 @@ using ZenLeap.Api.Models;
 
 namespace ZenLeap.Api.Authorization.Handlers
 {
-	public class GlobalAdministraitorsAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Company>
+	public class GlobalAdministraitorsAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Team>
 	{
 
 		protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
 													   OperationAuthorizationRequirement requirement,
-													   Company resource)
+													   Team resource)
 		{
 			if (context.User == null)
 			{

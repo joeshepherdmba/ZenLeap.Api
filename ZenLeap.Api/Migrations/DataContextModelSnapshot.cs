@@ -29,9 +29,6 @@ namespace ZenLeap.Api.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
@@ -45,8 +42,6 @@ namespace ZenLeap.Api.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -204,7 +199,49 @@ namespace ZenLeap.Api.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("ZenLeap.Api.Models.Event", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("EventOwnerId");
+
+                    b.Property<string>("ProjectOwnerId");
+
+                    b.Property<int>("TeamId");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventOwnerId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("ZenLeap.Api.Models.OwnerTeams", b =>
+                {
+                    b.Property<string>("TeamId");
+
+                    b.Property<string>("OwnerId");
+
+                    b.Property<int?>("TeamId1");
+
+                    b.HasKey("TeamId", "OwnerId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("TeamId1");
+
+                    b.ToTable("OwnerTeams");
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.Project", b =>
@@ -269,14 +306,38 @@ namespace ZenLeap.Api.Migrations
                     b.ToTable("ProjectTasks");
                 });
 
-            modelBuilder.Entity("ZenLeap.Api.Models.ApplicationRole", b =>
+            modelBuilder.Entity("ZenLeap.Api.Models.Team", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateEstablished");
 
-                    b.ToTable("ApplicationRole");
+                    b.Property<string>("OwnerId");
 
-                    b.HasDiscriminator().HasValue("ApplicationRole");
+                    b.Property<string>("TeamName")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("ZenLeap.Api.Models.UserTeams", b =>
+                {
+                    b.Property<string>("TeamId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<int?>("TeamId1");
+
+                    b.HasKey("TeamId", "UserId");
+
+                    b.HasIndex("TeamId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTeams");
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.User", b =>
@@ -289,7 +350,11 @@ namespace ZenLeap.Api.Migrations
 
                     b.Property<string>("LastName");
 
+                    b.Property<int?>("TeamId");
+
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("User");
 
@@ -348,6 +413,30 @@ namespace ZenLeap.Api.Migrations
                         .HasForeignKey("OwnerId");
                 });
 
+            modelBuilder.Entity("ZenLeap.Api.Models.Event", b =>
+                {
+                    b.HasOne("ZenLeap.Api.Models.User", "EventOwner")
+                        .WithMany()
+                        .HasForeignKey("EventOwnerId");
+
+                    b.HasOne("ZenLeap.Api.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ZenLeap.Api.Models.OwnerTeams", b =>
+                {
+                    b.HasOne("ZenLeap.Api.Models.User", "Owner")
+                        .WithMany("OwnedTeams")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ZenLeap.Api.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId1");
+                });
+
             modelBuilder.Entity("ZenLeap.Api.Models.Project", b =>
                 {
                     b.HasOne("ZenLeap.Api.Models.Company", "Company")
@@ -356,14 +445,14 @@ namespace ZenLeap.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ZenLeap.Api.Models.User", "ProjectOwner")
-                        .WithMany("Projects")
+                        .WithMany()
                         .HasForeignKey("ProjectOwnerId");
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.ProjectTask", b =>
                 {
                     b.HasOne("ZenLeap.Api.Models.User", "Owner")
-                        .WithMany("AssignedTasks")
+                        .WithMany()
                         .HasForeignKey("OwnerId");
 
                     b.HasOne("ZenLeap.Api.Models.Project", "Project")
@@ -372,11 +461,27 @@ namespace ZenLeap.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("ZenLeap.Api.Models.UserTeams", b =>
+                {
+                    b.HasOne("ZenLeap.Api.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId1");
+
+                    b.HasOne("ZenLeap.Api.Models.User", "User")
+                        .WithMany("Teams")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("ZenLeap.Api.Models.User", b =>
                 {
                     b.HasOne("ZenLeap.Api.Models.Company")
                         .WithMany("Employees")
                         .HasForeignKey("CompanyId");
+
+                    b.HasOne("ZenLeap.Api.Models.Team")
+                        .WithMany("Members")
+                        .HasForeignKey("TeamId");
                 });
 #pragma warning restore 612, 618
         }
