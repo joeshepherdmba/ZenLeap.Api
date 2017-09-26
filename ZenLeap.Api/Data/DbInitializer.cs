@@ -85,125 +85,156 @@ namespace ZenLeap.Api.Data
 
         #region snippet_CreateRoles        
 
-        private static async Task<string> EnsureUser(UserManager<User> userManager, User newUser, string testUserPw)
+        private static async Task<string> CreateUser(UserManager<User> userManager, User newUser, string testUserPw, string role=null)
         {
 
             var user = await userManager.FindByEmailAsync(newUser.Email);
+
             if (user == null)
             {
-                await userManager.CreateAsync(newUser, testUserPw);
-                await userManager.AddToRoleAsync(newUser, Constants.GlobalAdministratorsRole);
+                var result = await userManager.CreateAsync(newUser, testUserPw);
+
+                if(result.Succeeded) {
+
+					if (role != null)
+					{
+						await userManager.AddToRoleAsync(newUser, role);
+					}
+                    return newUser.Id;
+				}			
             }
 
-            return user.Id.ToString(); 
+            return user.Id;
         }
 
-        private static async Task<IdentityResult> EnsureRole(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, User newUser, string role)
+        private static async Task<IdentityResult> AddUserToRole(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, User newUser, IdentityRole role)
         {
             IdentityResult IR = null;
-            //var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
 
-            if (!await roleManager.RoleExistsAsync(role))
+            // If role does not exist, create it
+            if (!await roleManager.RoleExistsAsync(role.Name))
             {
-				var newRole = new IdentityRole
-				{
-					Name = role,
-					NormalizedName = role
-				};
-                IR = await roleManager.CreateAsync(newRole);
+				await CreateRole(roleManager, role);
             }
-
-            //var userManager = serviceProvider.GetService<UserManager<User>>();
 
             var user = await userManager.FindByIdAsync(newUser.Id.ToString());
 
-            IR = await userManager.AddToRoleAsync(user, role); 
+            IR = await userManager.AddToRoleAsync(user, role.Name); 
 
             return IR;
         }
+
+        private static async Task<IdentityResult> CreateRole(RoleManager<IdentityRole> roleManager, IdentityRole role) {
+			IdentityResult IR = null;
+
+			if (!await roleManager.RoleExistsAsync(role.Name))
+			{
+				var newRole = new IdentityRole
+				{
+					Name = role.Name,
+					NormalizedName = role.NormalizedName
+				};
+				IR = await roleManager.CreateAsync(newRole);
+			}
+            return IR;
+        }
+
         #endregion
 
         #region "seedDB"
         public static async void SeedDB(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            /* 
-             * Ensure base roles exist
-             * Global Admin
-             * Team Roles
-             * Event Roles
-            */
+            // Set up Roles
+            var newRoles = new IdentityRole[]
+            {
+                new IdentityRole {
+                    Name = Constants.GlobalAdministratorsRole,
+                    NormalizedName = Constants.GlobalAdministratorsRoleNormalizedName
+                },
+				new IdentityRole {
+					Name = Constants.TeamOwnersRole,
+					NormalizedName = Constants.TeamOwnersRoleNormalizedName
+				},
+				new IdentityRole {
+					Name = Constants.TeamAdministratorsRole,
+					NormalizedName = Constants.TeamAdministratorsRoleNormalizedName
+				},
+				new IdentityRole {
+					Name = Constants.TeamMembersRole,
+					NormalizedName = Constants.TeamMembersRoleNormalizedName
+				},
+				new IdentityRole {
+					Name = Constants.ActivityAdministratorsRole,
+					NormalizedName = Constants.ActivityAdministratorsRoleNormalizedName
+				},
+				new IdentityRole {
+                    Name = Constants.ActivityMembersRole,
+                    NormalizedName = Constants.ActivityMembersRoleNormalizedName
+                }
+			};
 
-            // Create Global Admin
+            // Create Roles
+            foreach (IdentityRole r in newRoles) {
+                await CreateRole(roleManager, r);
+            }
+
+            // Create Global Admin User
 			var globalAdmin = new User
 			{
 				FirstName = "Joe",
 				LastName = "Shepherd",
 				Email = "joe@eurussolutions.com",
-                UserName = "joe@eurussolutions.com",
-				//AssignedTasks = null,
-				//Projects = null
+                UserName = "joe@eurussolutions.com"
 			};
 
-            var id = await EnsureUser(userManager, globalAdmin, "Pass@word1");
-            await EnsureRole(roleManager, userManager, globalAdmin, Constants.GlobalAdministratorsRole);
+            var id = await CreateUser(userManager, globalAdmin, "Pass@word1", Constants.GlobalAdministratorsRole);
 
             var users = new User[]
             {
                 new User{
                     FirstName="Carson",
                     LastName="Alexander", 
-                    Email="test@test.com", 
-                    //AssignedTasks=null, 
-                    //Projects=null
+                    Email="test1@test.com", 
+                    UserName = "test1@test.com"
                 },
                 new User { 
                     FirstName = "Edward", 
-                    LastName = "Norton", 
-                    Email = "test@test.com", 
-                    //AssignedTasks = null, 
-                    //Projects = null
+                    LastName = "Norton",
+					Email = "test2@test.com",
+					UserName = "test2@test.com"
                 },
                 new User{
                     FirstName="Ginger",
-                    LastName="Martin", 
-                    Email="test@test.com", 
-                    //AssignedTasks=null, 
-                    //Projects=null
+                    LastName="Martin",
+					Email="test3@test.com",
+					UserName = "test3@test.com"
                 }
             };
 
+            // Set up array to hold new user ids
+            var ids = new string[3];
+            var i = 0;
             foreach (User u in users)
             {
-                await EnsureUser(userManager, u, "Pass@word1");
+                var uid = await CreateUser(userManager, u, "Pass@word1", Constants.TeamMembersRole);
+                ids[i] = uid;
+                i++;
             }
             context.SaveChanges();
 
-
-
-            var companies = new Company[]
+            // Create new Teams
+            var teams = new Team[]
             {
-                new Company{CompanyName="EURUS", OwnerId=id, DateEstablished=DateTime.Parse("01/07/2017"), Projects=null},
-                new Company{CompanyName="ZenLeap", OwnerId=id, DateEstablished=DateTime.Parse("01/07/2017"), Projects=null}
+                new Team{ TeamName="EURUS", OwnerId=ids[0], DateEstablished=DateTime.Parse("01/07/2017") },
+                new Team{ TeamName="ZenLeap", OwnerId=ids[1], DateEstablished=DateTime.Parse("01/07/2017") },
+                new Team{ TeamName="Swarm", OwnerId=ids[2], DateEstablished=DateTime.Parse("01/07/2017") }
             };
-            //foreach (Company c in companies)
-            //{
-            //    context.Companies.Add(c);
-            //}
-            context.SaveChanges();
-
-
-
-            var projects = new Project[]
+            foreach (Team t in teams)
             {
-                new Project{Title="ZenLeap Product Launch", CompanyId=2, Description="Project to manage the launch of the ZenLeap Proejct", ProjectOwnerId=id}
-            };
-            foreach (Project p in projects)
-            {
-                context.Projects.Add(p);
+                context.Teams.Add(t);
             }
             context.SaveChanges();
         }
-
     }
     #endregion
 }

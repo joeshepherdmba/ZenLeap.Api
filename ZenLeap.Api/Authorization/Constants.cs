@@ -15,13 +15,19 @@ namespace ZenLeap.Api.Authorization
 		public static readonly string RejectOperationName = "Reject";
 
 		public static readonly string TeamOwnersRole = "TeamOwner";
-        public static readonly string TeamAdministratorsRole = "TeamAdministrators";
-		public static readonly string TeamMembersRole = "TeamMembers";
+		public static readonly string TeamOwnersRoleNormalizedName = "Team Owner";
+        public static readonly string TeamAdministratorsRole = "TeamAdministrator";
+		public static readonly string TeamAdministratorsRoleNormalizedName = "Team Administrator";
+		public static readonly string TeamMembersRole = "TeamMember";
+		public static readonly string TeamMembersRoleNormalizedName = "Team Member";
 
-		public static readonly string EventAdministratorsRole = "EventAdministrators";
-		public static readonly string EventMembersRole = "EvetnMembers";
+		public static readonly string ActivityAdministratorsRole = "ActivityAdministrator";
+		public static readonly string ActivityAdministratorsRoleNormalizedName = "Activity Administrator";
+		public static readonly string ActivityMembersRole = "ActivityMember";
+		public static readonly string ActivityMembersRoleNormalizedName = "Activity Member";
 
 		public static readonly string GlobalAdministratorsRole = "GlobalAdministrators";
+		public static readonly string GlobalAdministratorsRoleNormalizedName = "Global Administrators";
 
 		// TODO: Deprecate
 		public static readonly string CompanyAdministratorsRole = "CompanyAdministrators";

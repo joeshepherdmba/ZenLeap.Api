@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZenLeap.Api.Models
 {
-    public class Event
+    public class Activity
     {
 		[Key]
 		public int Id { get; set; }
@@ -14,10 +14,8 @@ namespace ZenLeap.Api.Models
 
 		public string Description { get; set; }
 
-		public string ProjectOwnerId { get; set; }
-
-		[ForeignKey("EventOwnerId")]
-		public virtual User EventOwner { get; set; }
+		[ForeignKey("OwnerId")]
+		public virtual User Owner { get; set; }
 
 		[Required]
 		public int TeamId { get; set; }

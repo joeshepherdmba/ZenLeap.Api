@@ -246,8 +246,7 @@ namespace ZenLeap.Api.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    EventOwnerId = table.Column<string>(type: "TEXT", nullable: true),
-                    ProjectOwnerId = table.Column<string>(type: "TEXT", nullable: true),
+                    OwnerId = table.Column<string>(type: "TEXT", nullable: true),
                     TeamId = table.Column<int>(type: "INTEGER", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -255,8 +254,8 @@ namespace ZenLeap.Api.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_AspNetUsers_EventOwnerId",
-                        column: x => x.EventOwnerId,
+                        name: "FK_Events_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -366,9 +365,9 @@ namespace ZenLeap.Api.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_EventOwnerId",
+                name: "IX_Events_OwnerId",
                 table: "Events",
-                column: "EventOwnerId");
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_TeamId",

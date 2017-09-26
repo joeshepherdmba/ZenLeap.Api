@@ -20,22 +20,23 @@ namespace ZenLeap.Api
             Configuration = configuration;
         }
 
-		public Startup(IHostingEnvironment env)
-		{
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(env.ContentRootPath)
-				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+        // TODO: If everything runs remove the below commented section
+		//public Startup(IHostingEnvironment env)
+		//{
+		//	var builder = new ConfigurationBuilder()
+		//		.SetBasePath(env.ContentRootPath)
+		//		.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+		//		.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-			if (env.IsDevelopment())
-			{
-				// For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-				builder.AddUserSecrets<Startup>();
-			}
+		//	if (env.IsDevelopment())
+		//	{
+		//		// For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+		//		builder.AddUserSecrets<Startup>();
+		//	}
 
-			builder.AddEnvironmentVariables();
-			Configuration = builder.Build();
-		}
+		//	builder.AddEnvironmentVariables();
+		//	Configuration = builder.Build();
+		//}
 
         public IConfiguration Configuration { get; }
 
@@ -204,11 +205,9 @@ namespace ZenLeap.Api
 			//var userManager = app.ApplicationServices.GetService<UserManager<User>>();
 			//var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>();
 			//var context = app.ApplicationServices.GetService<DataContext>();
-//			//dbInitializer.Initialize();
+			dbInitializer.Initialize();
 			
             //DbInitializer.Initialize(userManager, roleManager, context).Wait();
-
-			// Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
 			app.UseMvc(routes =>
 			{
@@ -218,7 +217,7 @@ namespace ZenLeap.Api
 			});
 		}
 
-
+		// Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		//     public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbInitializer DbInitializer)
 		//     {
@@ -231,6 +230,7 @@ namespace ZenLeap.Api
 		//             app.UseExceptionHandler("/Error");
 		//         }
 
+		// TODO: If everything runs remove the below commented section
 		//app.UseAuthentication();
 		//         app.UseStaticFiles();
 		////app.UseIdentity();

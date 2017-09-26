@@ -23,7 +23,7 @@ namespace ZenLeap.Api.Data
 		public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
 		public DbSet<Team> Teams { get; set; }
-		public DbSet<Event> Events { get; set; }
+		public DbSet<Activity> Events { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
