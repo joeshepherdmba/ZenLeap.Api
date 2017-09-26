@@ -271,9 +271,8 @@ namespace ZenLeap.Api.Migrations
                 name: "TeamMembers",
                 columns: table => new
                 {
-                    TeamId = table.Column<string>(type: "TEXT", nullable: false),
-                    MemberId = table.Column<string>(type: "TEXT", nullable: false),
-                    TeamId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MemberId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,11 +284,11 @@ namespace ZenLeap.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeamMembers_Teams_TeamId1",
-                        column: x => x.TeamId1,
+                        name: "FK_TeamMembers_Teams_TeamId",
+                        column: x => x.TeamId,
                         principalTable: "Teams",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -398,11 +397,6 @@ namespace ZenLeap.Api.Migrations
                 name: "IX_TeamMembers_MemberId",
                 table: "TeamMembers",
                 column: "MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamMembers_TeamId1",
-                table: "TeamMembers",
-                column: "TeamId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamOwners_OwnerId",

@@ -3,7 +3,7 @@ namespace ZenLeap.Api.Models
 {
     public class TeamMembers
     {
-        public string TeamId { get; set; }
+        public int TeamId { get; set; }
         public Team Team { get; set; }
 
         public string MemberId { get; set; }

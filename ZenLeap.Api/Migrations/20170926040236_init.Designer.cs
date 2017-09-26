@@ -13,7 +13,7 @@ using ZenLeap.Api.Models;
 namespace ZenLeap.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20170926030413_init")]
+    [Migration("20170926040236_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -309,18 +309,14 @@ namespace ZenLeap.Api.Migrations
 
             modelBuilder.Entity("ZenLeap.Api.Models.TeamMembers", b =>
                 {
-                    b.Property<string>("TeamId");
+                    b.Property<int>("TeamId");
 
                     b.Property<string>("MemberId");
-
-                    b.Property<int?>("TeamId1");
 
                     b.HasKey("TeamId", "MemberId")
                         .HasName("TeamMembersId");
 
                     b.HasIndex("MemberId");
-
-                    b.HasIndex("TeamId1");
 
                     b.ToTable("TeamMembers");
                 });
@@ -464,7 +460,8 @@ namespace ZenLeap.Api.Migrations
 
                     b.HasOne("ZenLeap.Api.Models.Team", "Team")
                         .WithMany("Members")
-                        .HasForeignKey("TeamId1");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.TeamOwners", b =>

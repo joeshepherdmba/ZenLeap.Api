@@ -308,18 +308,14 @@ namespace ZenLeap.Api.Migrations
 
             modelBuilder.Entity("ZenLeap.Api.Models.TeamMembers", b =>
                 {
-                    b.Property<string>("TeamId");
+                    b.Property<int>("TeamId");
 
                     b.Property<string>("MemberId");
-
-                    b.Property<int?>("TeamId1");
 
                     b.HasKey("TeamId", "MemberId")
                         .HasName("TeamMembersId");
 
                     b.HasIndex("MemberId");
-
-                    b.HasIndex("TeamId1");
 
                     b.ToTable("TeamMembers");
                 });
@@ -463,7 +459,8 @@ namespace ZenLeap.Api.Migrations
 
                     b.HasOne("ZenLeap.Api.Models.Team", "Team")
                         .WithMany("Members")
-                        .HasForeignKey("TeamId1");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.TeamOwners", b =>
