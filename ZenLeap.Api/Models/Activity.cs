@@ -14,6 +14,8 @@ namespace ZenLeap.Api.Models
 
 		public string Description { get; set; }
 
+        public string OwnerId { get; set; }
+
 		[ForeignKey("OwnerId")]
 		public virtual User Owner { get; set; }
 

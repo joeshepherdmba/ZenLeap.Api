@@ -205,7 +205,7 @@ namespace ZenLeap.Api
 			//var userManager = app.ApplicationServices.GetService<UserManager<User>>();
 			//var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>();
 			//var context = app.ApplicationServices.GetService<DataContext>();
-			dbInitializer.Initialize();
+/**/			//dbInitializer.Initialize();
 			
             //DbInitializer.Initialize(userManager, roleManager, context).Wait();
 

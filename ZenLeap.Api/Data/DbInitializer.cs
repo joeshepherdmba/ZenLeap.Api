@@ -194,20 +194,20 @@ namespace ZenLeap.Api.Data
                 new User{
                     FirstName="Carson",
                     LastName="Alexander", 
-                    Email="test1@test.com", 
-                    UserName = "test1@test.com"
+                    Email="carson@test.com", 
+                    UserName = "carson@test.com"
                 },
                 new User { 
                     FirstName = "Edward", 
                     LastName = "Norton",
-					Email = "test2@test.com",
-					UserName = "test2@test.com"
+					Email = "ed@test.com",
+					UserName = "ed@test.com"
                 },
                 new User{
                     FirstName="Ginger",
                     LastName="Martin",
-					Email="test3@test.com",
-					UserName = "test3@test.com"
+					Email="ginger@test.com",
+					UserName = "ginger@test.com"
                 }
             };
 

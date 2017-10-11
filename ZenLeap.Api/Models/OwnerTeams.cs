@@ -1,7 +1,7 @@
 ﻿using System;
 namespace ZenLeap.Api.Models
 {
-    public class TeamOwners
+    public class OwnerTeams
     {
         public string TeamId { get; set; }
         public Team Team { get; set; }

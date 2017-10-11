@@ -306,7 +306,7 @@ namespace ZenLeap.Api.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("ZenLeap.Api.Models.TeamMembers", b =>
+            modelBuilder.Entity("ZenLeap.Api.Models.UserTeams", b =>
                 {
                     b.Property<int>("TeamId");
 
@@ -317,25 +317,7 @@ namespace ZenLeap.Api.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("TeamMembers");
-                });
-
-            modelBuilder.Entity("ZenLeap.Api.Models.TeamOwners", b =>
-                {
-                    b.Property<string>("TeamId");
-
-                    b.Property<string>("OwnerId");
-
-                    b.Property<int?>("TeamId1");
-
-                    b.HasKey("TeamId", "OwnerId")
-                        .HasName("TeamOwnersId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("TeamId1");
-
-                    b.ToTable("TeamOwners");
+                    b.ToTable("UserTeams");
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.User", b =>
@@ -446,11 +428,11 @@ namespace ZenLeap.Api.Migrations
             modelBuilder.Entity("ZenLeap.Api.Models.Team", b =>
                 {
                     b.HasOne("ZenLeap.Api.Models.User", "Owner")
-                        .WithMany()
+                        .WithMany("OwnedTeams")
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("ZenLeap.Api.Models.TeamMembers", b =>
+            modelBuilder.Entity("ZenLeap.Api.Models.UserTeams", b =>
                 {
                     b.HasOne("ZenLeap.Api.Models.User", "Member")
                         .WithMany("Teams")
@@ -461,18 +443,6 @@ namespace ZenLeap.Api.Migrations
                         .WithMany("Members")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ZenLeap.Api.Models.TeamOwners", b =>
-                {
-                    b.HasOne("ZenLeap.Api.Models.User", "Owner")
-                        .WithMany("OwnedTeams")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ZenLeap.Api.Models.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId1");
                 });
 
             modelBuilder.Entity("ZenLeap.Api.Models.User", b =>

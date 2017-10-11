@@ -14,7 +14,7 @@ namespace ZenLeap.Api.Data
         protected GenericRepository<ProjectTask> _projectTaskRepository;
         protected GenericRepository<Company> _companyRepository;
 		protected GenericRepository<Team> _teamRepository;
-		protected GenericRepository<Models.Activity> _eventRepository;
+        protected GenericRepository<Models.Activity> _activityRepository;
 
         public UnitOfWork(DataContext context)
         {
@@ -89,13 +89,13 @@ namespace ZenLeap.Api.Data
 		/// <summary>
 		/// Get/Set Property for Company repository.
 		/// </summary>
-		public GenericRepository<Models.Activity> EventRepository
+        public GenericRepository<Models.Activity> ActivityRepository
 		{
 			get
 			{
-				if (this._eventRepository == null)
-					this._eventRepository = new GenericRepository<Models.Activity>(_context);
-				return _eventRepository;
+				if (this._activityRepository == null)
+					this._activityRepository = new GenericRepository<Models.Activity>(_context);
+				return _activityRepository;
 			}
 		}
 
